@@ -1,5 +1,5 @@
 # https://hub.docker.com/_/alpine/
-FROM alpine:latest
+FROM node:alpine
 
 MAINTAINER [1000i100] Millicent Billette <git@1000i100.fr>
 
