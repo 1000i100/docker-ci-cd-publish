@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build & publish
+      run: |
+        docker build . --file Dockerfile --tag 1000i100/docker-ci-cd-publish:latest
+        docker tag 1000i100/docker-ci-cd-publish:latest 1000i100/docker-ci-cd-publish:$(date +%s)
+        docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        docker push 1000i100/docker-ci-cd-publish:latest
+        docker push 1000i100/docker-ci-cd-publish:$(date +%s)
