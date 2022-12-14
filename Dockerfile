@@ -12,6 +12,8 @@ RUN apk update \
             ca-certificates \
             git \
             lftp \
+            tar \
+            zip \
             bash \
  && update-ca-certificates \
  && rm -rf /var/cache/apk/*
