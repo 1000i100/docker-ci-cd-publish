@@ -5,3 +5,4 @@ https://github.com/1000i100/docker-ci-cd-publish
 
 https://hub.docker.com/r/1000i100/docker-ci-cd-publish
 
+Last update : 25/11/2023
