@@ -11,29 +11,21 @@ RUN apk update \
     ca-certificates \
     git \
     lftp \
-    curlftpfs \
-    fuse \
     tar \
     zip \
     bash \
-    # Dependencies for Playwright browsers
     chromium \
     firefox \
-    webkit2gtk \
-    # Additional system dependencies for browsers
     xvfb \
     dbus \
     fontconfig \
     freetype \
-    harfbuzz \
     ttf-freefont \
-    wqy-zenhei \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/* \
-    # Install Node.js packages globally
-    && bun install -g nuekit vitest jest @vitest/browser playwright \
-    # Install Playwright browsers (using system browsers on Alpine)
-    && bunx playwright install-deps \
-    # Set environment variables for Playwright
-    && echo 'export PLAYWRIGHT_BROWSERS_PATH=/usr/bin' >> /etc/profile \
-    && echo 'export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1' >> /etc/profile
+    && bun install -g vitest jest @vitest/browser playwright nuekit \
+    && bunx playwright install-deps
+
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/usr/bin
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
