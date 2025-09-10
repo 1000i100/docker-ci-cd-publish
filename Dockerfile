@@ -7,21 +7,17 @@ RUN apk update \
     && apk upgrade \
     && apk add --no-cache \
     nodejs-current npm \
+    lcov \
     rsync \
-    openssh-client \
-    ca-certificates \
+    openssh-client ca-certificates \
     git \
     lftp \
-    tar \
-    zip \
+    tar zip \
     bash \
-    chromium \
-    firefox \
+    chromium firefox \
     xvfb \
     dbus \
-    fontconfig \
-    freetype \
-    ttf-freefont \
+    fontconfig freetype ttf-freefont \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/* \
     && bun install -g vitest jest @vitest/browser playwright nuekit
