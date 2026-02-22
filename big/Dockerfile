@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Build essentials
     build-essential pkg-config \
     # Flutter Linux desktop deps
-    clang cmake ninja-build \
+    clang cmake ninja-build lld \
     libgtk-3-dev libsecret-1-dev libjsoncpp-dev libcurl4-openssl-dev \
     # Java (Android SDK + Kotlin)
     openjdk-17-jdk-headless \
