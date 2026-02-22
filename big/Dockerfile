@@ -31,6 +31,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lcov \
     && rm -rf /var/lib/apt/lists/*
 
+# Java environment (needed by CMake FindJNI for Flutter plugins like jni)
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+# Chromium (Debian bookworm uses 'chromium', not 'google-chrome')
+ENV CHROME_EXECUTABLE=/usr/bin/chromium
+ENV CHROME_BIN=/usr/bin/chromium
+
 # ============================================================
 # Bun
 # ============================================================
@@ -86,7 +93,9 @@ RUN yes | sdkmanager --licenses > /dev/null 2>&1 \
 # Rust
 # ============================================================
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/root/.cargo/bin:$PATH"
+ENV CARGO_HOME=/root/.cargo
+ENV RUSTUP_HOME=/root/.rustup
+ENV PATH="$CARGO_HOME/bin:$PATH"
 
 # ============================================================
 # Kotlin (standalone compiler) - dernière version disponible
@@ -114,8 +123,9 @@ RUN cd /tmp \
     && rm godot.zip
 
 # ============================================================
-# Python (pipx ready, no --break-system-packages needed)
+# Python (pipx ready)
 # ============================================================
+ENV PATH="/root/.local/bin:$PATH"
 RUN pipx ensurepath
 
 # ============================================================
@@ -150,3 +160,11 @@ RUN echo "=== Versions ===" \
     && bun --version \
     && godot --version --headless \
     && echo "=== OK ==="
+
+# ============================================================
+# Verify JNI is findable by CMake (fail-fast at image build)
+# ============================================================
+RUN mkdir /tmp/jni_check \
+    && printf 'cmake_minimum_required(VERSION 3.10)\nproject(jni_check)\nfind_package(JNI REQUIRED)\nmessage(STATUS "JNI found: ${JNI_INCLUDE_DIRS}")\n' > /tmp/jni_check/CMakeLists.txt \
+    && cmake -S /tmp/jni_check -B /tmp/jni_check/build \
+    && rm -rf /tmp/jni_check
