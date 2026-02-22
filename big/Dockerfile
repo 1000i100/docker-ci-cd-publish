@@ -82,7 +82,7 @@ ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_SDK_ROOT=$ANDROID_HOME
 RUN mkdir -p $ANDROID_HOME/cmdline-tools \
     && cd /tmp \
-    && wget -q https://dl.google.com/android/repository/commandlinetools-linux-latest.zip -O cmdline-tools.zip \
+    && wget -q https://dl.google.com/android/repository/commandlinetools-linux-14742923_latest.zip -O cmdline-tools.zip \
     && unzip -q cmdline-tools.zip \
     && mv cmdline-tools $ANDROID_HOME/cmdline-tools/latest \
     && rm cmdline-tools.zip
