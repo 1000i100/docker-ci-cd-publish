@@ -70,8 +70,8 @@ RUN cd /tmp \
     && rm flutter.tar.xz rl.json; \
     fi \
     && git config --global --add safe.directory $FLUTTER_HOME
-ENV PATH="$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:$HOME/.pub-cache/bin:$PATH"
-RUN flutter precache --android --web --linux-desktop \
+ENV PATH="$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:/root/.pub-cache/bin:$PATH"
+RUN flutter precache --android --web --linux \
     && flutter config --no-analytics \
     && dart --disable-analytics
 
