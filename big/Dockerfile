@@ -89,11 +89,12 @@ RUN mkdir -p $ANDROID_HOME/cmdline-tools \
 ENV PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 # Installer les dernières versions disponibles des outils Android
 RUN yes | sdkmanager --licenses > /dev/null 2>&1 \
-    && LATEST_ANDROID_PLATFORM=$(sdkmanager --list | grep "platforms;android-" | grep -v "sources;" | tail -1 | cut -d' ' -f1) \
-    && LATEST_ANDROID_BUILD_TOOLS=$(sdkmanager --list | grep "build-tools;" | tail -1 | cut -d' ' -f1) \
+    && sdkmanager --list 2>/dev/null | head -80 \
+    && LATEST_ANDROID_PLATFORM=$(sdkmanager --list 2>/dev/null | sed -n 's/^ *\(platforms;android-[^ ]*\).*/\1/p' | tail -1) \
+    && LATEST_ANDROID_BUILD_TOOLS=$(sdkmanager --list 2>/dev/null | sed -n 's/^ *\(build-tools;[^ ]*\).*/\1/p' | tail -1) \
     && echo "Installation de la plateforme Android: ${LATEST_ANDROID_PLATFORM}" \
     && echo "Installation des build-tools Android: ${LATEST_ANDROID_BUILD_TOOLS}" \
-    && sdkmanager --no_https \
+    && sdkmanager \
     "platform-tools" \
     "${LATEST_ANDROID_PLATFORM}" \
     "${LATEST_ANDROID_BUILD_TOOLS}"
