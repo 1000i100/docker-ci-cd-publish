@@ -41,34 +41,17 @@ ENV PATH="$BUN_INSTALL/bin:$PATH"
 # ============================================================
 # Node.js (LTS)
 # ============================================================
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get install -y --no-install-recommends nodejs \
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # JS global tools
 RUN bun install -g vitest jest @vitest/browser playwright nuekit
-
 # ============================================================
 # Flutter + Dart
 # ============================================================
 ENV FLUTTER_HOME=/opt/flutter
-RUN cd /tmp \
-    && curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json > rl.json \
-    && HASH=$(jq -r ".current_release[\"$FLUTTER_VERSION\"] // empty" rl.json) \
-    && if [ -n "$HASH" ] && [ "$HASH" != "null" ]; then \
-    ARCHIVE=$(jq -r ".releases[] | select(.hash == \"$HASH\") | .archive" rl.json | head -n 1); \
-    else \
-    ARCHIVE=$(jq -r ".releases[] | select(.version == \"$FLUTTER_VERSION\") | .archive" rl.json | head -n 1); \
-    fi \
-    && if [ -z "$ARCHIVE" ] || [ "$ARCHIVE" = "null" ]; then \
-    echo "Flutter version $FLUTTER_VERSION not found! Falling back to git clone..." \
-    && git clone -b $FLUTTER_VERSION https://github.com/flutter/flutter.git $FLUTTER_HOME; \
-    else \
-    echo "Downloading Flutter $FLUTTER_VERSION from $ARCHIVE..." \
-    && wget -q https://storage.googleapis.com/flutter_infra_release/releases/$ARCHIVE -O flutter.tar.xz \
-    && tar xf flutter.tar.xz -C /opt \
-    && rm flutter.tar.xz rl.json; \
-    fi \
+RUN git clone -b $FLUTTER_VERSION --depth 1 https://github.com/flutter/flutter.git $FLUTTER_HOME \
     && git config --global --add safe.directory $FLUTTER_HOME
 ENV PATH="$FLUTTER_HOME/bin:$FLUTTER_HOME/bin/cache/dart-sdk/bin:/root/.pub-cache/bin:$PATH"
 RUN flutter precache --android --web --linux \
@@ -141,6 +124,17 @@ RUN pipx ensurepath
 ENV PLAYWRIGHT_BROWSERS_PATH=/usr/bin
 ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 ENV DISPLAY=:99
+
+# ============================================================
+# Warmup caches (Dart / Flutter)
+# ============================================================
+RUN yes | flutter doctor --android-licenses \
+    && flutter doctor -v \
+    && flutter create /tmp/dummy_project \
+    && cd /tmp/dummy_project \
+    && flutter pub get \
+    && cd / \
+    && rm -rf /tmp/dummy_project
 
 # ============================================================
 # Sanity check
