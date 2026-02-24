@@ -162,9 +162,10 @@ RUN echo "=== Versions ===" \
     && echo "=== OK ==="
 
 # ============================================================
-# Verify JNI is findable by CMake (fail-fast at image build)
+# Verify JNI headers are findable by CMake (fail-fast at image build)
+# Only check JVM + headers, not AWT (absent from jdk-headless)
 # ============================================================
 RUN mkdir /tmp/jni_check \
-    && printf 'cmake_minimum_required(VERSION 3.10)\nproject(jni_check)\nfind_package(JNI REQUIRED)\nmessage(STATUS "JNI found: ${JNI_INCLUDE_DIRS}")\n' > /tmp/jni_check/CMakeLists.txt \
+    && printf 'cmake_minimum_required(VERSION 3.10)\nproject(jni_check LANGUAGES C)\nfind_package(JNI REQUIRED COMPONENTS JVM)\nmessage(STATUS "JNI found: ${JNI_INCLUDE_DIRS}")\n' > /tmp/jni_check/CMakeLists.txt \
     && cmake -S /tmp/jni_check -B /tmp/jni_check/build \
     && rm -rf /tmp/jni_check
