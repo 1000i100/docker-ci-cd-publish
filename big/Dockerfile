@@ -98,6 +98,27 @@ ENV RUSTUP_HOME=/root/.rustup
 ENV PATH="$CARGO_HOME/bin:$PATH"
 
 # ============================================================
+# Windows cross-compilation (cargo-xwin = MSVC toolchain on Linux)
+# Base already ships clang + lld; add llvm (llvm-rc/llvm-lib/llvm-dlltool for
+# Windows resources + import libs), nsis (Tauri's NSIS .exe bundler) and
+# osslsigncode (Authenticode-sign the .exe from Linux). Then add the Windows
+# Rust targets, install cargo-xwin, and WARM the MSVC CRT/SDK cache so CI jobs
+# never re-download it (~1 GB baked in, on purpose: fewer per-job steps).
+# XWIN_ACCEPT_LICENSE is set here so the image owner accepts the MS CRT/SDK
+# EULA once at build time; jobs inherit it.
+# ============================================================
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    llvm nsis osslsigncode \
+    && rm -rf /var/lib/apt/lists/*
+ENV XWIN_ACCEPT_LICENSE=1
+ENV XWIN_CACHE_DIR=/opt/xwin
+RUN rustup target add x86_64-pc-windows-msvc aarch64-pc-windows-msvc \
+    && cargo install --locked cargo-xwin \
+    && cargo new --bin /tmp/xwin-warm \
+    && (cd /tmp/xwin-warm && cargo xwin build --release --target x86_64-pc-windows-msvc) \
+    && rm -rf /tmp/xwin-warm
+
+# ============================================================
 # Kotlin (standalone compiler) - dernière version disponible
 # ============================================================
 ENV KOTLIN_HOME=/opt/kotlin
