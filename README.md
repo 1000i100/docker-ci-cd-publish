@@ -17,6 +17,11 @@ Last update : 13/12/2025
 - **Browser Support**: Chromium, Firefox, WebKit (Safari)
 - **Package Manager**: Bun (built-in)
 
+La variante `1000i100/docker-ci-cd-publish:big` ajoute notamment Rust, le JDK,
+le SDK Android, les Build Tools 35, le NDK 27 et les quatre cibles Rust Android.
+Elle permet de construire des applications Tauri Android sans réinstaller cette
+chaîne d’outils à chaque pipeline.
+
 ## Usage
 
 ### Basic Docker Usage

@@ -168,6 +168,28 @@ RUN yes | flutter doctor --android-licenses \
     && rm -rf /tmp/dummy_project
 
 # ============================================================
+# Tauri Android (figé pour éviter les téléchargements en CI)
+# Placé tard dans l’image pour conserver le cache des couches lourdes ci-dessus.
+# ============================================================
+ARG ANDROID_PLATFORM_VERSION=35
+ARG ANDROID_BUILD_TOOLS_VERSION=35.0.0
+ARG ANDROID_NDK_VERSION=27.0.12077973
+RUN apt-get update && apt-get install -y --no-install-recommends libssl-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && yes | sdkmanager --licenses > /dev/null 2>&1 \
+    && sdkmanager \
+      "platforms;android-${ANDROID_PLATFORM_VERSION}" \
+      "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+      "ndk;${ANDROID_NDK_VERSION}" \
+    && rustup target add \
+      aarch64-linux-android \
+      armv7-linux-androideabi \
+      x86_64-linux-android \
+      i686-linux-android
+ENV NDK_HOME=$ANDROID_HOME/ndk/$ANDROID_NDK_VERSION
+ENV ANDROID_NDK_HOME=$NDK_HOME
+
+# ============================================================
 # Sanity check
 # ============================================================
 RUN echo "=== Versions ===" \
