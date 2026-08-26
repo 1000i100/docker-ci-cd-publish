@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     # Core tools
     bash curl wget git git-lfs openssh-client ca-certificates gnupg \
     rsync lftp tar zip unzip xz-utils jq \
+    # Graphics — `librsvg2-bin` provides `rsvg-convert` (SVG to PNG at build
+    # time, for icons and favicons). Note the package name differs from the
+    # base image, where Alpine ships it as `rsvg-convert`.
+    librsvg2-bin \
     # Build essentials
     build-essential pkg-config \
     # Flutter Linux desktop deps
