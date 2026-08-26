@@ -6,13 +6,14 @@ https://github.com/1000i100/docker-ci-cd-publish
 
 https://hub.docker.com/r/1000i100/docker-ci-cd-publish
 
-Last update : 13/12/2025
+Last update : 26/08/2026
 
 ## Features
 
 - **Runtime**: Bun (fast JavaScript/TypeScript runtime)
 - **Base**: Alpine Linux (lightweight)
 - **CI/CD Tools**: rsync, openssh-client, git, lftp, tar, zip, bash
+- **Graphics**: rsvg-convert (SVG → PNG, pour générer icônes et favicons au build)
 - **Testing**: Vitest, Jest, Playwright
 - **Browser Support**: Chromium, Firefox, WebKit (Safari)
 - **Package Manager**: Bun (built-in)

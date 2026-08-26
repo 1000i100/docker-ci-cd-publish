@@ -18,6 +18,7 @@ RUN apk update \
     xvfb \
     dbus \
     fontconfig freetype ttf-freefont \
+    rsvg-convert \
     && update-ca-certificates \
     && rm -rf /var/cache/apk/* \
     && bun install -g vitest jest @vitest/browser playwright nuekit
