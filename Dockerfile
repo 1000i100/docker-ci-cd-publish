@@ -9,6 +9,7 @@ RUN apk update \
     nodejs-current npm \
     lcov \
     rsync \
+    curl \
     openssh-client ca-certificates \
     git \
     lftp \

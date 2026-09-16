@@ -1,18 +1,18 @@
 # docker-ci-cd-publish
 
-Bun Alpine image with rsync, openssh, git, ftp, zip, tar, and browser testing capabilities
+Bun Alpine image with rsync, openssh, curl, git, ftp, zip, tar, and browser testing capabilities
 
 https://github.com/1000i100/docker-ci-cd-publish
 
 https://hub.docker.com/r/1000i100/docker-ci-cd-publish
 
-Last update : 26/08/2026
+Last update : 16/09/2026
 
 ## Features
 
 - **Runtime**: Bun (fast JavaScript/TypeScript runtime)
 - **Base**: Alpine Linux (lightweight)
-- **CI/CD Tools**: rsync, openssh-client, git, lftp, tar, zip, bash
+- **CI/CD Tools**: rsync, openssh-client, curl, git, lftp, tar, zip, bash
 - **Graphics**: rsvg-convert (SVG → PNG, pour générer icônes et favicons au build)
 - **Testing**: Vitest, Jest, Playwright
 - **Browser Support**: Chromium, Firefox, WebKit (Safari)
@@ -274,6 +274,7 @@ services:
 - **git**: Version control
 - **rsync**: File synchronization
 - **openssh-client**: SSH client for remote operations
+- **curl**: HTTP client (busybox only ships wget otherwise)
 - **lftp**: Advanced FTP client
 - **tar**: Archive utility
 - **zip**: Compression utility
