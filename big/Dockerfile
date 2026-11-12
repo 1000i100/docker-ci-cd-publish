@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 LABEL maintainer="[1000i100] Millicent Billette <git@1000i100.fr>"
 
@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     clang cmake ninja-build lld \
     libgtk-3-dev libsecret-1-dev libjsoncpp-dev libcurl4-openssl-dev \
     # Java (Android SDK + Kotlin)
-    openjdk-17-jdk-headless \
+    openjdk-21-jdk-headless \
     # Python
     python3 python3-pip python3-venv pipx \
     # Browser testing
@@ -36,9 +36,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Java environment (needed by CMake FindJNI for Flutter plugins like jni)
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 
-# Chromium (Debian bookworm uses 'chromium', not 'google-chrome')
+# Chromium (Debian uses 'chromium', not 'google-chrome')
 ENV CHROME_EXECUTABLE=/usr/bin/chromium
 ENV CHROME_BIN=/usr/bin/chromium
 
