@@ -123,6 +123,15 @@ RUN rustup target add x86_64-pc-windows-msvc aarch64-pc-windows-msvc \
     && rm -rf /tmp/xwin-warm
 
 # ============================================================
+# Tauri Linux desktop (deb / AppImage / rpm bundles): WebKitGTK and friends, so CI jobs
+# build without an apt-get install of their own.
+# ============================================================
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libwebkit2gtk-4.1-dev libayatana-appindicator3-dev librsvg2-dev \
+    libssl-dev libxdo-dev patchelf file \
+    && rm -rf /var/lib/apt/lists/*
+
+# ============================================================
 # Kotlin (standalone compiler) - dernière version disponible
 # ============================================================
 ENV KOTLIN_HOME=/opt/kotlin

@@ -3,6 +3,11 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
+  # Weekly rebuild: bun, Rust, Node and the system packages are installed at their latest
+  # version at build time, so CI jobs using the image never have to update them.
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
   pull_request:
     branches: [ "main" ]
 
